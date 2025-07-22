@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}EcoTech - Green Technology Solutions{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 bg-success text-white rounded">
+    <div class="container">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-leaf"></i> Welcome to EcoTech
+        </h1>
+        <p class="lead mb-4">Discover sustainable solutions for a greener tomorrow</p>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="{% url 'product_list' %}" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-shopping-cart"></i> Shop Eco Products
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'sustainability_calculator' %}" class="btn btn-outline-light btn-lg me-3">
+                    <i class="fas fa-calculator"></i> Carbon Calculator
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'eco_tips' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-lightbulb"></i> Eco Tips
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5">
+    <div class="col-md-4 text-center mb-4">
+        <div class="feature-card p-4">
+            <i class="fas fa-recycle fa-3x text-success mb-3"></i>
+            <h4>Sustainable Products</h4>
+            <p>High-quality eco-friendly products that help reduce your environmental impact.</p>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="feature-card p-4">
+            <i class="fas fa-calculator fa-3x text-success mb-3"></i>
+            <h4>Carbon Calculator</h4>
+            <p>Calculate your carbon footprint and discover ways to reduce your environmental impact.</p>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="feature-card p-4">
+            <i class="fas fa-seedling fa-3x text-success mb-3"></i>
+            <h4>Green Living</h4>
+            <p>Tips and products for an environmentally conscious lifestyle.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products -->
+<h2 class="mt-5 mb-3 text-success">
+    <i class="fas fa-star"></i> Featured Eco Products
+</h2>
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 product-card">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+            <img src="/static/images/default-product.jpg" class="card-img-top" alt="Eco Product">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-success">{{ product.category }}</span>
+                    <span class="text-success fw-bold">${{ product.price }}</span>
+                </div>
+                <a href="{% url 'product_detail' product.pk %}" class="btn btn-success mt-2 w-100">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p class="text-muted">No products available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Latest Eco Tips -->
+<h2 class="mt-5 mb-3 text-success">
+    <i class="fas fa-lightbulb"></i> Latest Eco Tips
+</h2>
+<div class="row">
+    {% for tip in tips %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 tip-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ tip.title }}</h5>
+                <p class="card-text">{{ tip.content|truncatewords:20 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-info">{{ tip.category }}</span>
+                    <small class="text-muted">By {{ tip.author.username }}</small>
+                </div>
+                <a href="{% url 'eco_tips' %}" class="btn btn-outline-success mt-2 w-100">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p class="text-muted">No tips available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Call to Action -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="bg-light p-5 rounded text-center">
+            <h3 class="text-success mb-3">Join Our Green Community</h3>
+            <p class="lead mb-4">Start your journey towards a more sustainable lifestyle today!</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-success btn-lg me-3">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-success btn-lg">Sign In</a>
+            {% else %}
+            <a href="{% url 'dashboard' %}" class="btn btn-success btn-lg me-3">Go to Dashboard</a>
+            <a href="{% url 'upload' %}" class="btn btn-outline-success btn-lg">Share Your Story</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

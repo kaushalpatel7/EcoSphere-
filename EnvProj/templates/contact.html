@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4 shadow">
+            <h3 class="mb-4 text-success"><i class="fas fa-envelope"></i> Contact Us</h3>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Name</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_subject" class="form-label">Subject</label>
+                    {{ form.subject }}
+                    {{ form.subject.errors }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_message" class="form-label">Message</label>
+                    {{ form.message }}
+                    {{ form.message.errors }}
+                </div>
+                <button type="submit" class="btn btn-success w-100">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

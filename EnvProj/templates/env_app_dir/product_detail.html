@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - EcoTech{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+        {% else %}
+        <img src="/static/images/default-product.jpg" class="img-fluid rounded" alt="Eco Product">
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h2 class="text-success">{{ product.name }}</h2>
+        <p>{{ product.description }}</p>
+        <p><strong>Category:</strong> {{ product.category }}</p>
+        <p><strong>Price:</strong> <span class="text-success">${{ product.price }}</span></p>
+        <p><strong>Eco Friendly:</strong> {% if product.is_eco_friendly %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-danger">No</span>{% endif %}</p>
+        <a href="{% url 'product_list' %}" class="btn btn-outline-success mt-3"><i class="fas fa-arrow-left"></i> Back to Products</a>
+    <a href="{% url 'order_product' product.pk %}" class="btn btn-success btn-block mt-2 w-100">Buy / Order</a>
+    </div>
+</div>
+{% endblock %}

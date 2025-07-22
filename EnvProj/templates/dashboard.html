@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - EcoTech{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- User Uploads -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5><i class="fas fa-upload"></i> Your Recent Uploads</h5>
+            </div>
+            <div class="card-body">
+                {% if user_uploads %}
+                    <ul class="list-group">
+                        {% for upload in user_uploads %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>
+                                <i class="fas fa-file-alt text-success"></i>
+                                {{ upload.title }}
+                            </span>
+                            <a href="{{ upload.file.url }}" class="btn btn-sm btn-outline-success" target="_blank">View</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">You haven't uploaded anything yet.</p>
+                {% endif %}
+                <a href="{% url 'upload' %}" class="btn btn-success btn-block mt-3 w-100">
+                    <i class="fas fa-upload"></i> Upload New File
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent History -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5><i class="fas fa-history"></i> Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_history %}
+                    <ul class="list-group">
+                        {% for visit in recent_history %}
+                        <li class="list-group-item">
+                            <i class="fas fa-arrow-right text-success"></i>
+                            {{ visit.page_visited }} <span class="text-muted float-end">{{ visit.visit_date|date:"M d, H:i" }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No recent activity found.</p>
+                {% endif %}
+                <a href="{% url 'history' %}" class="btn btn-outline-success btn-block mt-3 w-100">
+                    <i class="fas fa-list"></i> View Full History
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Links -->
+<div class="row mt-4">
+    <div class="col-md-4 mb-3">
+        <a href="{% url 'sustainability_calculator' %}" class="btn btn-outline-success w-100 py-3">
+            <i class="fas fa-calculator"></i> Carbon Calculator
+        </a>
+    </div>
+    <div class="col-md-4 mb-3">
+        <a href="{% url 'eco_tips' %}" class="btn btn-outline-success w-100 py-3">
+            <i class="fas fa-lightbulb"></i> Eco Tips
+        </a>
+    </div>
+    <div class="col-md-4 mb-3">
+        <a href="{% url 'product_list' %}" class="btn btn-outline-success w-100 py-3">
+            <i class="fas fa-shopping-cart"></i> Eco Products
+        </a>
+    </div>
+</div>
+{% endblock %}

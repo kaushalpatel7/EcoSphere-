@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}My Orders - EcoTech{% endblock %}
+{% block content %}
+<h2 class="text-success mb-4"><i class="fas fa-box"></i> My Orders</h2>
+<div class="row">
+    {% if orders %}
+        {% for order in orders %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if order.product.image %}
+                <img src="{{ order.product.image.url }}" class="card-img-top" alt="{{ order.product.name }}">
+                {% else %}
+                <img src="/static/images/default-product.jpg" class="card-img-top" alt="Eco Product">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ order.product.name }}</h5>
+                    <p class="card-text mb-1"><strong>Order ID:</strong> <span class="text-muted">{{ order.order_id }}</span></p>
+                    <p class="card-text mb-1"><strong>Category:</strong> {{ order.product.category }}</p>
+                    <p class="card-text mb-1"><strong>Price:</strong> <span class="text-success fw-bold">${{ order.product.price }}</span></p>
+                    <p class="card-text mb-1"><strong>Quantity:</strong> {{ order.quantity }}</p>
+                    <p class="card-text mb-1"><strong>Date:</strong> {{ order.order_date|date:"M d, Y H:i" }}</p>
+                    <p class="card-text mb-1"><strong>Status:</strong> <span class="badge bg-info">{{ order.status }}</span></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="col-12"><p class="text-muted">You have not placed any orders yet.</p></div>
+    {% endif %}
+</div>
+{% endblock %}

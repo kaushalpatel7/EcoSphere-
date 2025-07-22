@@ -1,0 +1,15 @@
+body {
+    background-color: #f8f9fa;
+}
+.feature-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.product-card, .tip-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.hero-section {
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+}

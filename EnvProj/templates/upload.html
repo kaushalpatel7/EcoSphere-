@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload File - EcoTech{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white text-center">
+                <h3><i class="fas fa-upload"></i> Upload to EcoTech</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                    </div>
+                </form>
+                <hr class="my-4">
+                <div class="text-center">
+                    <a href="{% url 'dashboard' %}" class="text-success">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

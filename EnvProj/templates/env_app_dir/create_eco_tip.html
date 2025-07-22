@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Add Eco Tip - EcoTech{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4><i class="fas fa-plus"></i> Add New Eco Tip</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success mt-2">
+                        <i class="fas fa-check"></i> Submit
+                    </button>
+                    <a href="{% url 'eco_tips' %}" class="btn btn-secondary mt-2 ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

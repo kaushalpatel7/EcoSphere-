@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Shopping Cart</h2>
+    {% if cart_items %}
+    <form id="place-order-form" method="post" action="{% url 'place_order' %}">
+        {% csrf_token %}
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr data-product-id="{{ item.id }}">
+                    <td>{{ item.name }}</td>
+                    <td>
+                        {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.name }}" width="60">
+                        {% else %}
+                            No image
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="number" class="form-control quantity-input" min="1" value="{{ item.quantity }}" data-product-id="{{ item.id }}">
+                    </td>
+                    <td>${{ item.price }}</td>
+                    <td class="item-subtotal">${{ item.subtotal }}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-item" data-product-id="{{ item.id }}">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+            <div>
+                <h4>Total: $<span id="cart-total">{{ total }}</span></h4>
+                <button type="submit" class="btn btn-success">Place Order</button>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <p>Your cart is empty.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-primary">Continue Shopping</a>
+    {% endif %}
+</div>
+<script>
+const quantityInputs = document.querySelectorAll('.quantity-input');
+quantityInputs.forEach(input => {
+    input.addEventListener('change', function() {
+        const productId = this.getAttribute('data-product-id');
+        const quantity = this.value;
+        fetch(`/cart/update/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: `quantity=${quantity}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const row = document.querySelector(`tr[data-product-id='${productId}']`);
+                if (row) {
+                    const item = data.cart[productId];
+                    row.querySelector('.item-subtotal').textContent = `$${(item.price * item.quantity).toFixed(2)}`;
+                }
+                let total = 0;
+                Object.values(data.cart).forEach(item => {
+                    total += item.price * item.quantity;
+                });
+                document.getElementById('cart-total').textContent = total.toFixed(2);
+            }
+        });
+    });
+});
+const removeButtons = document.querySelectorAll('.remove-item');
+removeButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        fetch(`/cart/remove/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const row = document.querySelector(`tr[data-product-id='${productId}']`);
+                if (row) row.remove();
+                let total = 0;
+                Object.values(data.cart).forEach(item => {
+                    total += item.price * item.quantity;
+                });
+                document.getElementById('cart-total').textContent = total.toFixed(2);
+                if (Object.keys(data.cart).length === 0) {
+                    location.reload();
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

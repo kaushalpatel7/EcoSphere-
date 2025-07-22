@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Eco Tip Details - EcoTech{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <a href="{% url 'eco_tips' %}" class="btn btn-link mb-3">&larr; Back to Eco Tips</a>
+    <div class="card">
+        {% if tip.image %}
+        <img src="{{ tip.image.url }}" class="card-img-top" alt="Eco Tip Image" style="max-height: 350px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title text-success">{{ tip.title }}</h2>
+            <span class="badge bg-info mb-2">{{ tip.category }}</span>
+            <p class="card-text mt-3">{{ tip.content|linebreaks }}</p>
+            <hr>
+            <p class="text-muted">By {{ tip.author.username }} on {{ tip.created_at|date:"M d, Y H:i" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %} 
